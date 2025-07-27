@@ -1,0 +1,9 @@
+# .gitignore
+*.pkl
+*.pdf
+*.csv
+__pycache__/
+.env
+.venv/
+*.pyc
+.ipynb_checkpoints/
