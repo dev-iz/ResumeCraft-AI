@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/iiita/Downloads/RESUME_RANKING_WEBAPP_USING_GEMINI-main/venv
+set -gx VIRTUAL_ENV /home/iiita/Downloads/pj/RESUME_RANKING_WEBAPP_USING_GEMINI-main/venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
