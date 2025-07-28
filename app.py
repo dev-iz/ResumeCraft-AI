@@ -1,6 +1,4 @@
 import streamlit as st
-from streamlit_analytics import st_analytics
-
 import PyPDF2 as pdf
 import os
 import pandas as pd
@@ -12,9 +10,19 @@ import difflib
 import json
 import re
 
-# Start analytics tracking
-st_analytics(app_id="G-BJMTQQPZK")
+# Inject Google Analytics tracking via HTML
+st.markdown("""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BJMTQQPZK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BJMTQQPZK');
+</script>
+""", unsafe_allow_html=True)
 
+# Setup
 load_dotenv()
 os.environ['GOOGLE_API_KEY'] = st.secrets['API_KEY']
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
@@ -67,10 +75,9 @@ jd = st.text_area("Paste the Job Description")
 uploaded_files = st.file_uploader("Upload Your Resumes", type="pdf", accept_multiple_files=True)
 
 if st.button("Submit"):
-    st.session_state["clicked_submit"] = True  # Optional: Track submit
-    ranked_resumes = []
-
     if uploaded_files and jd:
+        ranked_resumes = []
+
         for uploaded_file in uploaded_files:
             text = input_pdf_text(uploaded_file)
             input_text = input_prompt.format(text=text, jd=jd)
@@ -108,7 +115,7 @@ if st.button("Submit"):
         df = pd.DataFrame(ranked_resumes)
         df["Rank"] = range(1, len(df) + 1)
 
-        st.session_state["df"] = df  # Store in session
+        st.session_state["df"] = df
 
         def highlight_match(val):
             color = '#b2f2bb' if val >= 85 else '#a5d8ff' if val >= 70 else '#ffc9c9'
@@ -148,7 +155,6 @@ if st.button("Submit"):
         st.subheader("📊 Match % Distribution")
         st.bar_chart(df.set_index("name")["match_percentage"])
 
-# === Dynamic filter outside submit ===
 if "df" in st.session_state:
     st.subheader("🎯 Filter by Minimum Match %")
     min_score = st.slider("Set minimum match %", 0, 100, 70)

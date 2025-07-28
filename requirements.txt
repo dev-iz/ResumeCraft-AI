@@ -6,4 +6,3 @@ streamlit_extras
 matplotlib
 wordcloud
 pandas
-streamlit-analytics
