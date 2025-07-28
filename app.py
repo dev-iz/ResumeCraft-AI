@@ -1,4 +1,6 @@
 import streamlit as st
+from streamlit_analytics import st_analytics
+
 import PyPDF2 as pdf
 import os
 import pandas as pd
@@ -9,6 +11,9 @@ import google.generativeai as genai
 import difflib
 import json
 import re
+
+# Start analytics tracking
+st_analytics(app_id="G-BJMTQQPZK")
 
 load_dotenv()
 os.environ['GOOGLE_API_KEY'] = st.secrets['API_KEY']
@@ -62,9 +67,10 @@ jd = st.text_area("Paste the Job Description")
 uploaded_files = st.file_uploader("Upload Your Resumes", type="pdf", accept_multiple_files=True)
 
 if st.button("Submit"):
-    if uploaded_files and jd:
-        ranked_resumes = []
+    st.session_state["clicked_submit"] = True  # Optional: Track submit
+    ranked_resumes = []
 
+    if uploaded_files and jd:
         for uploaded_file in uploaded_files:
             text = input_pdf_text(uploaded_file)
             input_text = input_prompt.format(text=text, jd=jd)
@@ -120,7 +126,6 @@ if st.button("Submit"):
             st.markdown(f"**{row['name']}**")
             st.progress(int(row['match_percentage']))
 
-        # Wordcloud of missing keywords
         all_keywords = [kw for kws in df["missing_keywords"] for kw in kws]
         if all_keywords:
             st.subheader("☁️ Common Missing Keywords")
