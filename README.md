@@ -93,7 +93,7 @@ We welcome contributions! To get started:
 ## 📬 Contact
 
 **Maintainer**: Devendra Izardar  
-**Email**: devendraizardar2024@hamil.com
+**Email**: devendraizardar2024@gmail.com
 
 ---
 
